@@ -1,12 +1,36 @@
 @specs/constitution.md
 
+> **Expo version:** always read the versioned docs at https://docs.expo.dev/versions/v57.0.0/ before writing any Expo/React Native code — the API changes between versions.
+
 ## Workflow
 
 This project follows spec-driven development for everything, not just setup: constitution → spec → clarify →
 plan → tasks → analyze → implement. Each phase is a Beads epic, gated — don't open the next phase's epic while
 the current one has open issues, and don't let implementation work happen inside a planning epic.
 
+At the start of every session, check Beads state (open epic, open/closed issues) before proposing next steps —
+don't assume continuity from a previous conversation, since sessions carry no memory of it. When an epic's
+issues all appear closed, say so explicitly and confirm before opening the next epic's issues, rather than
+proceeding silently. If a genuinely open product or architecture question comes up mid-implementation (not a
+tooling question), surface it rather than deciding it unilaterally — same posture as the constitution's own
+governance rule for conflicts.
+
+## Commits
+
+Conventional Commits format (feat/fix/docs/chore/refactor/test), referencing the Beads issue being closed (e.g.
+a footer line "Beads: <issue-id>"). One commit generally maps to one closed issue — not a hard rule, but the
+default unit — so there's a traceable line from spec → contract → Beads issue → commit.
+
+**Push is user-triggered only.** Agents stage and commit; they do not push. The user decides when to push.
+
+## Definition of done (implementation issues)
+
+An issue isn't done because code exists for it. It's done when: it satisfies what its linked spec/contract
+section requires, lint/typecheck/tests pass (including contract tests where applicable), and the commit
+references the issue. See STYLE.md for naming and file-organization conventions.
+
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:7510c1e2 -->
+
 ## Beads Issue Tracker
 
 This project uses **bd (beads)** for issue tracking. Run `bd prime` to see full workflow context and commands.
@@ -30,26 +54,14 @@ bd close <id>         # Complete work
 
 ## Session Completion
 
-**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
+When ending a work session:
 
-**MANDATORY WORKFLOW:**
+1. File issues for remaining work
+2. Run quality gates if code changed (`npm run lint && npm run format-check && npm run typecheck`)
+3. Close finished issues: `bd close <id>`
+4. Stage and commit: `git add <files> && git commit -m "chore(...): ... \n\nBeads: <id>"`
+5. Hand off — provide context for next session
 
-1. **File issues for remaining work** - Create issues for anything that needs follow-up
-2. **Run quality gates** (if code changed) - Tests, linters, builds
-3. **Update issue status** - Close finished work, update in-progress items
-4. **PUSH TO REMOTE** - This is MANDATORY:
-   ```bash
-   git pull --rebase
-   git push
-   git status  # MUST show "up to date with origin"
-   ```
-5. **Clean up** - Clear stashes, prune remote branches
-6. **Verify** - All changes committed AND pushed
-7. **Hand off** - Provide context for next session
+**Push is user-triggered** — see Commits section above. Agents do not push.
 
-**CRITICAL RULES:**
-- Work is NOT complete until `git push` succeeds
-- NEVER stop before pushing - that leaves work stranded locally
-- NEVER say "ready to push when you are" - YOU must push
-- If push fails, resolve and retry until it succeeds
 <!-- END BEADS INTEGRATION -->

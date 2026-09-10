@@ -1,4 +1,4 @@
-# Constitution — Footballers Seen Live
+# Constitution — WhoPlayd
 
 This document is the durable contract for this project. It rarely changes. Every spec, plan, and task beneath it must stay inside these bounds. An agent (or a future you) should be able to read this file alone and know what's in bounds and what isn't, without needing prior chat context.
 
@@ -22,7 +22,7 @@ A secondary purpose: this project is a deliberate vehicle for practising an agen
 
 - Local-first. The device is the source of truth for a user's own sightings. No user account is required to use the app fully.
 - Thin, largely stateless server. A proxy sits between the app and the third-party football data provider. Its jobs: protect the API key/quota, cache aggressively, and hold the minimal state needed for asynchronous lookup retries. It never stores a user's collection.
-- Provider-agnostic contract. The app talks only to our own proxy's stable interface, never directly to the third-party API. The underlying provider can be swapped without an app release. Proxy responses carry an explicit `schemaVersion` so the data model can evolve without forcing every client to update in lockstep. Note: this keeps the *interface* stable across a swap, not the *data* — see Data Principles for why a provider swap still fragments historical aggregates in the MVP.
+- Provider-agnostic contract. The app talks only to our own proxy's stable interface, never directly to the third-party API. The underlying provider can be swapped without an app release. Proxy responses carry an explicit `schemaVersion` so the data model can evolve without forcing every client to update in lockstep. Note: this keeps the _interface_ stable across a swap, not the _data_ — see Data Principles for why a provider swap still fragments historical aggregates in the MVP.
 - Caching tiers reflect data volatility. Fixtures-for-a-day: short TTL. Lineup/events-for-a-concluded-match: long TTL, but invalidatable — never hardcoded as permanently immutable. Exact durations are a spec/plan-level tuning decision, not fixed here.
 - Minimize third-party API dependency on the critical path. Once a completed match's lineup/events have been fetched and cached, they're treated as effectively permanent for practical purposes — the retry/backoff machinery exists for the resolution phase, not for re-verifying data already in hand. No proactive or background pre-fetching in the MVP; caching is lazy and demand-driven only, revisited if usage patterns justify the added complexity.
 - Async resolution is a first-class state, not an error case. A sighting can be `pending`, `resolved`, or `failed`. Retries are deduplicated by match, not by user, with backoff rather than a fixed interval.
@@ -48,7 +48,7 @@ These are deliberately out of scope. Do not design around them; revisit only if 
 - No user accounts, no auth, no cross-user data of any kind.
 - No social features: friends, following, sharing, leaderboards, comparisons. (If ever built, these require auth and a real backend — a different system, not an extension of this one.)
 - No ticket marketplace or monetisation features.
-- No domestic league tracked as an ongoing competition below England League Two — this is about which *competitions* are tracked, not which *clubs* can appear. A club below League Two can still show up in the data via a covered cup or European fixture (e.g. reaching the FA Cup First Round Proper); their domestic league simply isn't otherwise tracked. No assumption that Scottish league coverage mirrors English coverage.
+- No domestic league tracked as an ongoing competition below England League Two — this is about which _competitions_ are tracked, not which _clubs_ can appear. A club below League Two can still show up in the data via a covered cup or European fixture (e.g. reaching the FA Cup First Round Proper); their domestic league simply isn't otherwise tracked. No assumption that Scottish league coverage mirrors English coverage.
 - No international football (national team fixtures) in the MVP.
 - No manual sighting entry or correction. Provider data is authoritative once resolved — users cannot add a player themselves or edit a resolved sighting's fields.
 - No cross-provider reconciliation, ID mapping, or provider redundancy in the MVP. This is an accepted MVP-only limitation, not a permanent one — needed to move beyond MVP, not solved now.
