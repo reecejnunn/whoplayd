@@ -26,8 +26,8 @@ default unit — so there's a traceable line from spec → contract → Beads is
 ## Branching
 
 One branch per epic: `<epic-id>/<short-slug>` (e.g. `wp-gpo/spec`). Beads close as commits on the branch;
-when the epic is done, open a PR — CI must pass, then squash-merge to master. No direct pushes to master;
-master is protected at the repo level (CI required, squash merges only).
+when the epic is done, open a PR — CI must pass, then squash-merge to main. No direct pushes to main;
+main is protected at the repo level (CI required, squash merges only).
 
 ## Definition of done (implementation issues)
 
