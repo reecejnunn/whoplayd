@@ -23,6 +23,12 @@ default unit — so there's a traceable line from spec → contract → Beads is
 
 **Push is user-triggered only.** Agents stage and commit; they do not push. The user decides when to push.
 
+## Branching
+
+One branch per epic: `<epic-id>/<short-slug>` (e.g. `wp-gpo/spec`). Beads close as commits on the branch;
+when the epic is done, open a PR — CI must pass, then squash-merge to master. No direct pushes to master;
+master is protected at the repo level (CI required, squash merges only).
+
 ## Definition of done (implementation issues)
 
 An issue isn't done because code exists for it. It's done when: it satisfies what its linked spec/contract
