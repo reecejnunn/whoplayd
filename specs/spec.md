@@ -1,6 +1,6 @@
 # Specification — WhoPlayd MVP
 
-Version: 0.1.0 (draft, pending wp-gpo.2 clarify/review pass)
+Version: 0.2.0 (clarified against constitution.md — wp-gpo.2)
 Depends on: [constitution.md](./constitution.md) — this document does not restate the constitution's
 Non-Goals or Architecture Principles; it makes the Product Scope section implementable and resolves
 the Open Questions the constitution deliberately left open.
@@ -30,7 +30,7 @@ Sportmonks' rate-limit mechanics; and (if still relevant) Highlightly's ToS posi
 `wp-y08.5` blocks `proxy-contract.md` / `sighting-schema.md` (wp-y08.1–.3) — it does not block this
 document, since spec.md only needs the working-assumption + fallback framing, not a locked answer.
 
-**Cost implication to carry forward:** WhoPlayd's competition list (§2.4) is ~11–13 leagues, which
+**Cost implication to carry forward:** WhoPlayd's competition list (§4) is ~10–13 leagues, which
 will likely require Sportmonks' €99/mo Growth tier rather than the €29/mo Starter tier (5-league
 cap). This is a real MVP operating cost, not a blocker.
 
@@ -55,11 +55,14 @@ reached. Neither axis is primary; the entry point is a user choice on the histor
 
 ### 2.4 Scottish league cutoff
 
-**Aspirational target: as deep as England** — Premiership, Championship, League One, League Two —
-mirroring the English Premier League→League Two depth. This is contingent on `wp-y08.5`:
-API-Football's coverage page already confirms all 4 Scottish tiers; Sportmonks only publicly
-confirms Premiership today. If the spike shows Sportmonks can't reach Scottish League One/Two, the
-API-Football fallback path (§2.1) is what preserves this depth target for launch.
+**Provider-driven, no parity target.** Per the constitution, Scottish coverage is not assumed to
+mirror England's depth — the cutoff is whatever the chosen provider covers cleanly, decided by
+`wp-y08.5`'s findings, not by matching England's 4-tier depth as a goal. `wp-y08.5` will report,
+per candidate provider, the deepest Scottish tier with reliable fixture + lineup + minutes-played
+data; that reported tier is the launch cutoff, whether or not it happens to reach League Two.
+API-Football's coverage page currently lists all 4 Scottish tiers and Sportmonks currently lists
+only Premiership publicly, but neither claim is confirmed against real data yet — the spike settles
+this, not this document.
 
 ## 3. Discovery Flows
 
@@ -80,8 +83,11 @@ Entry point is a user choice between the two axes in §2.3:
 
 **Team-first:**
 
-1. User searches/selects a team (any team that has appeared in a covered fixture — not restricted
-   to a fixed club list, consistent with the constitution's fixture-level coverage principle).
+1. User browses and selects a team from a list (e.g. alphabetical, or filtered as the user types
+   against known team names — not a free-text query across sightings/matches, per the constitution's
+   "no free-text search" non-goal). Any team that has appeared in a covered fixture is selectable —
+   not restricted to a fixed club list, consistent with the constitution's fixture-level coverage
+   principle.
 2. User selects a year/season.
 3. App shows that team's fixtures in covered competitions for that season.
 4. User selects a match. Flow continues at §3.3.
@@ -112,6 +118,15 @@ Per the constitution, once a sighting resolves, its fields (player, minutes, etc
 editable. If a user believes the provider data is wrong, there is no in-app correction path in the
 MVP.
 
+### 3.5 Export / import
+
+Per the constitution ("local data is exportable... a safety net against storage eviction, not a
+sync feature"), the user can export their full local sighting history as a file, and re-import it
+(same device, a new device, or after a browser storage eviction on web). Export/import is a plain
+data-portability operation, not account-based sync — no server-side copy is created or required.
+Exact file format and the export/import UI surface are plan.md-level decisions; this spec only
+establishes that the capability exists and is reachable from the MVP.
+
 ## 4. Coverage (competition list)
 
 Fixture/competition-level coverage, per the constitution's "coverage is decided at the
@@ -119,11 +134,13 @@ fixture/competition level, not the club level":
 
 - English domestic: Premier League, Championship, League One, League Two.
 - English cups: FA Cup (First Round Proper onward), League Cup (Carabao Cup).
-- Scottish domestic: Premiership, Championship, League One, League Two (aspirational — see §2.4).
+- Scottish domestic: Premiership at minimum; deeper tiers (Championship, League One, League Two)
+  included only as far as `wp-y08.5` confirms clean provider coverage (§2.4) — not assumed.
 - European: Champions League, Europa League, Europa Conference League.
 
-Total: ~11–13 covered competitions depending on the final Scottish depth. International football
-is out of scope (constitution Non-Goals).
+Total: ~10–13 covered competitions depending on the final Scottish depth (anywhere from
+Premiership-only up to full 4-tier coverage). International football is out of scope (constitution
+Non-Goals).
 
 ## 5. Aggregate Views
 
@@ -171,4 +188,4 @@ names the entities this spec's flows depend on, not their wire format:
   (constitution Open Questions; scoped to `wp-r3q.6`).
 - Wire-level schema for Sighting/Match/Player/Team/Competition, proxy request/response shapes,
   retry-worker state machine — `wp-y08` contract specs, blocked on `wp-y08.5`.
-- Final confirmation of Scottish League One/Two inclusion — depends on `wp-y08.5`.
+- Final confirmation of Scottish tier depth beyond Premiership — depends on `wp-y08.5`.
